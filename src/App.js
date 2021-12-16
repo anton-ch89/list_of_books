@@ -1,24 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
+import { GlobalStyle } from "./style/GlobalStyles";
+import BooksAddForm from "./Components/BooksAddForm";
+import List from "./Components/List";
+import { useList } from "./Hooks/useList";
+import { useBook } from "./Hooks/useBook";
+import { useAuthor } from "./Hooks/useAuthor";
+
 
 function App() {
+
+  const list = useList();
+  const book = useBook();
+  const author = useAuthor();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <GlobalStyle />
+        <BooksAddForm {...list} {...book}  {...author}/>
+        <List {...list} {...book} {...author}/>
+    </>
   );
 }
 
