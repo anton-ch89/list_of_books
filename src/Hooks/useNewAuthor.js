@@ -1,8 +1,6 @@
 import { useState } from "react";
-import { useAuthor } from "./useAuthor";
 
 export const useNewAuthor = () => {
-    const {author} = useAuthor();
-    const [newAuthor, setNewAuthor] = useState(author);
+    const [newAuthor, setNewAuthor] = useState('Автор не задан');
     return { newAuthor, setNewAuthor };
 }

@@ -43,14 +43,12 @@ const BooksAddForm = ({ setListItems, book, setBook, author, setAuthor }) => {
         placeholder="Автор"
         value={author}
         onChange={(e) => setAuthor(e.target.value)}
-        required
       />
       <Input
         type="text"
         placeholder="Название книги"
         value={book}
         onChange={(e) => setBook(e.target.value)}
-        required
       />
 
       {book.trim() === "" || author.trim() === "" ? (

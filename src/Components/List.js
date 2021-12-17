@@ -28,10 +28,27 @@ const WrapperBook = styled.div`
   justify-content: center;
   align-items: start;
 `;
+const WrapperButtons = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
 
 const DeleteButton = styled.button`
   margin-left: 15px;
   color: red;
+  background-color: white;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-shadow: 2px 2px 7px rgba(0, 0, 0, 0.5);
+  height: 30px;
+  font-weight: bold;
+  margin-top: 20px;
+`;
+
+const EditButton = styled.button`
+  margin-left: 15px;
   background-color: white;
   border-radius: 5px;
   border: 1px solid #ccc;
@@ -55,10 +72,10 @@ const Input = styled.input`
   font-size: 14px;
 `;
 
-const List = ({ setListItems, data }) => {
-  const { setNewBook } = useNewBook();
-  const { setNewAuthor } = useNewAuthor();
-
+const List = ({ listItems, setListItems, data }) => {
+  const { newBook, setNewBook } = useNewBook();
+  const { newAuthor, setNewAuthor } = useNewAuthor();
+  console.log(listItems);
   return (
     <Container>
       {data.map((item, i) => {
@@ -69,25 +86,45 @@ const List = ({ setListItems, data }) => {
               <Input
                 type="text"
                 value={item.author}
-                onChange={(e) => setNewAuthor((item.author = e.target.value))}
+                onChange={(e) => setNewAuthor(item.author = e.target.value)}
               />
 
               <P>{` ${item.book}`}</P>
               <Input
                 type="text"
                 value={item.book}
-                onChange={(e) => setNewBook((item.book = e.target.value))}
+                onChange={(e) => setNewBook(item.book = e.target.value)}
               />
             </WrapperBook>
+            <WrapperButtons>
+            <EditButton
+              onClick={() =>setListItems((prevList) => {
+                  return prevList.map((elem, index)=> {
+                 if(i === index){
+                   elem = {
+                     author: newAuthor,
+                     book: newBook
+                   }
+                 }
+                return elem
+                })
+              })
+            
+              }
+            >
+              Редактировать
+            </EditButton>
             <DeleteButton
               onClick={() =>
-                setListItems((prevList) =>
-                  prevList.filter((_, iList) => iList !== i)
+                setListItems((prevList) => {
+                 return prevList.filter((_, iList) => iList !== i)
+                }
                 )
               }
             >
               Удалить
             </DeleteButton>
+            </WrapperButtons>
           </Item>
         );
       })}
