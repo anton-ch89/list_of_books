@@ -72,10 +72,9 @@ const Input = styled.input`
   font-size: 14px;
 `;
 
-const List = ({ listItems, setListItems, data }) => {
+const List = ({ setListItems, data }) => {
   const { newBook, setNewBook } = useNewBook();
   const { newAuthor, setNewAuthor } = useNewAuthor();
-  console.log(listItems);
   return (
     <Container>
       {data.map((item, i) => {
