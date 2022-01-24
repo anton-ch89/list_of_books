@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { randomId } from "../Fuctions/randomId";
 
 const BooksForm = styled.div`
   display: flex;
@@ -35,6 +36,9 @@ const Button = styled.button`
 `;
 
 const BooksAddForm = ({ setListItems, book, setBook, author, setAuthor }) => {
+
+  let id = randomId();
+
   return (
     <BooksForm>
       <MainTitle>Список книг</MainTitle>
@@ -58,7 +62,7 @@ const BooksAddForm = ({ setListItems, book, setBook, author, setAuthor }) => {
       ) : (
         <Button
           onClick={() => {
-            setListItems((prevList) => [{ author, book }, ...prevList]);
+            setListItems((prevList) => [{id, author, book }, ...prevList]);
             setAuthor("");
             setBook("");
           }}

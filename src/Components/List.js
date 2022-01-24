@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useNewBook } from "../Hooks/useNewBook";
 import { useNewAuthor } from "../Hooks/useNewAuthor";
+import { useEdit } from "../Hooks/useEdit";
 
 const Container = styled.div`
   display: flex;
@@ -54,6 +55,7 @@ const EditButton = styled.button`
   border: 1px solid #ccc;
   box-shadow: 2px 2px 7px rgba(0, 0, 0, 0.5);
   height: 30px;
+  margin-top: 20px;
   font-weight: bold;
 `;
 
@@ -75,60 +77,70 @@ const Input = styled.input`
 const List = ({ setListItems, data }) => {
   const { newBook, setNewBook } = useNewBook();
   const { newAuthor, setNewAuthor } = useNewAuthor();
+  const { edit, setEdit } = useEdit();
+
+  console.log(data);
+  const getValue = (prop) => {
+    return data.reduce((res, elem) => {
+      if (elem.id === edit) {
+        console.log('elem[prop]: ', elem[prop]);
+        return elem[prop]
+      } else { return res }
+    }, '')
+  }
+
+  const changeItem = (event, prop) => {
+    setListItems(
+      data.map(elem => elem.id === edit ? { ...elem, [prop]: event.target.value } : elem)
+    )
+  }
+
+  const editInputAuthor = (
+    <>
+      <Input
+        type="text"
+        value={getValue('author')}
+        onChange={(e) => changeItem(e, 'author')}
+      />
+    </>
+  )
+  const editInputBook = (
+    <>
+      <Input
+        type="text"
+        value={getValue('book')}
+        onChange={(e) => changeItem(e, 'book')}
+      />
+    </>
+  )
+
+
+  const res = data.map(elem => {
+    return <Item key={elem.id} >
+      <WrapperBook>
+        <P>{elem.author}</P>
+        {edit === elem.id ? editInputAuthor : null}
+        <P>{elem.book}</P>
+        {edit === elem.id ? editInputBook : null}
+      </WrapperBook>
+      <WrapperButtons>
+        {edit === elem.id
+          ? <EditButton onClick={() => setEdit(null)}>Сохранить</EditButton>
+          : null}
+        <EditButton onClick={() => setEdit(elem.id)}>Редактировать</EditButton>
+        <DeleteButton onClick={() => setListItems(data.filter((e) => elem.id !== e.id))}>
+          Удалить
+        </DeleteButton>
+      </WrapperButtons>
+    </Item>
+  })
+
   return (
     <Container>
-      {data.map((item, i) => {
-        return (
-          <Item key={i}>
-            <WrapperBook>
-              <P>{`${item.author}`}</P>
-              <Input
-                type="text"
-                value={item.author}
-                onChange={(e) => setNewAuthor(item.author = e.target.value)}
-              />
-
-              <P>{` ${item.book}`}</P>
-              <Input
-                type="text"
-                value={item.book}
-                onChange={(e) => setNewBook(item.book = e.target.value)}
-              />
-            </WrapperBook>
-            <WrapperButtons>
-            <EditButton
-              onClick={() =>setListItems((prevList) => {
-                  return prevList.map((elem, index)=> {
-                 if(i === index){
-                   elem = {
-                     author: newAuthor,
-                     book: newBook
-                   }
-                 }
-                return elem
-                })
-              })
-            
-              }
-            >
-              Редактировать
-            </EditButton>
-            <DeleteButton
-              onClick={() =>
-                setListItems((prevList) => {
-                 return prevList.filter((_, iList) => iList !== i)
-                }
-                )
-              }
-            >
-              Удалить
-            </DeleteButton>
-            </WrapperButtons>
-          </Item>
-        );
-      })}
+      {res}
     </Container>
-  );
+  )
+
 };
 
 export default List;
